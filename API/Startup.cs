@@ -1,6 +1,11 @@
+using DataAccess.Abstract;
+using DataAccess.Contcrete.Contexts;
+using DataAccess.Contcrete.EntityFramework;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -25,8 +30,12 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            services.AddDbContext<ApplicationDbContext>(opt =>
+            opt.UseSqlServer("Data Source = (localdb)\\MSSQLLocalDB; Initial Catalog = AngularWebERP; Integrated Security = True", opts =>
+             opts.MigrationsAssembly("Database").MigrationsHistoryTable(HistoryRepository.DefaultTableName,"dbo")));
             services.AddControllers();
+            services.AddTransient<IUserDAL, EfUserDAL>();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
