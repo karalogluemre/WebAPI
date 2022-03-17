@@ -15,7 +15,6 @@ namespace DataAccess
         Task<T> GetAsync(Expression<Func<T, bool>> filter);
         Task<T> AddAsync(T entity);
         Task<T> UpdateAsync(T entity);
-        //Task<T> DeleteAsync(T entity);
         Task<bool> DeleteAsync(int id);
     }
 }
